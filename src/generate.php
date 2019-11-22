@@ -22,15 +22,19 @@
         echo 'Erro ao conectar com o MySQL: ' . $e->getMessage();
     }
 
+    class Participante {
+        public $id, $nome, $cpf, $evento_id;
+    }
+
     // --------- Busca de CPF Cadastrado no Banco de Dados ----- //
     $cpf_onlyNumber = preg_replace("/[^0-9]/", "", $cpf);
-    $sql = "SELECT nome FROM participantes WHERE evento_id = $curso AND cpf = '$cpf_onlyNumber' ";
+    $sql = "SELECT * FROM participantes WHERE evento_id = $curso AND cpf = '$cpf_onlyNumber' ";
     $stmt = $PDO->prepare($sql);
     $stmt->execute();
 
     // --------- Gerando Certificado em PDF ----- //
     if($stmt->rowCount() > 0) {
-        $nome = $stmt->fetchColumn();
+        $row = $stmt->fetchObject('Participante');
         
         $sql = "SELECT filename FROM eventos WHERE id = $curso";
         $stmt = $PDO->prepare($sql);
@@ -45,15 +49,20 @@
         $pdf->AddPage('L');
         $pdf->SetLineWidth(1.5);
         $pdf->Image("layout/$filename.jpg",0,0,300);
-            // Nome
-            $pdf->SetFont('ITCEDSCR', '', 40); // Tipo de fonte e tamanho
-            $pdf->SetXY(73,83); //Parte chata onde tem que ficar ajustando a posição X e Y
-            $pdf->MultiCell(160, 10, $nome, '', 'C', 0); // Tamanho width e height e posição
+        // Nome
+        $pdf->SetFont('ITCEDSCR', '', 40); // Tipo de fonte e tamanho
+        $pdf->SetXY(73,83); //Parte chata onde tem que ficar ajustando a posição X e Y
+        $pdf->MultiCell(160, 10, $row->nome, '', 'C', 0); // Tamanho width e height e posição
 
         // Verso
         $pdf->AddPage('L');
         $pdf->SetLineWidth(1.5);
         $pdf->Image("layout/$filename-verso.jpg",0,0,300);
+        // Código
+        $pdf->SetFont('courier', 'B', 10);
+        $pdf->SetXY(90, 195);
+        $str = utf8_decode('CÓDIGO: ');
+        $pdf->MultiCell(130, 11, $str . $row->id, '', 'C', 0);
 
         $certificado="arquivos/$cpf.pdf";
         $pdfdoc = $pdf->Output('', 'S');

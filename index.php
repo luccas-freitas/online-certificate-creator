@@ -23,13 +23,13 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>SILP | Eventos & Treinamentos</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
-    <script src="typed.min.js"></script>
+    <script src="assets/js/typed.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 
@@ -76,18 +76,35 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </nav>
 
-    <div class="row" style="text-align:center;">
-        <h1>
-            <span id="typed"></span>
-        </h1>
-    </div>
     <div class="container">
-        <form class="form-horizontal" action="gerar_certificado/generate.php" method="post" id="generate_form">
+        <form class="form-horizontal" action="src/validate.php" method="get" id="validate_form" name="validate">
+            <div class="col-sm-8"></div>
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input name="busca" class="form-control" type="text" placeholder="Insira o código impresso no certificado" aria-label="Search" required>
+                    <span class="input-group-addon" onclick="validate.submit()" style="cursor:pointer;">
+                        <i class="fas fa-search text-white" aria-hidden="true"></i>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="row" style="text-align:center;">
+            <h1><p>&nbsp;</p>
+                <span id="typed"></span>
+            </h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <form class="form-horizontal" action="src/generate.php" method="post" id="generate_form">
             <fieldset>
                 <p>&nbsp;</p>
 
                 <div class="form-group dropdown">
-                    <label class="col-md-4 control-label">Curso</label>
+                    <label class="col-md-4 control-label"></label>
                     <div class="col-md-4 inputGroupContainer">
                         <div class="input-group">
                             <span class="input-group-addon">
@@ -105,25 +122,25 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <div class="form-group">
-                    <label class="col-md-4 control-label">CPF</label>
+                    <label class="col-md-4 control-label"></label>
                     <div class="col-md-4 inputGroupContainer">
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="fas fa-user"></i>
                             </span>
-                            <input name="cpf" placeholder="CPF" class="form-control" type="text" maxlength="14" onkeypress="formatar('###.###.###-##', this);">
+                            <input name="cpf" placeholder="CPF" class="form-control" type="text" maxlength="14" onkeypress="formatar('###.###.###-##', this);" required>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-md-4 control-label">E-Mail</label>
+                    <label class="col-md-4 control-label"></label>
                     <div class="col-md-4 inputGroupContainer">
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="fas fa-envelope"></i>
                             </span>
-                            <input name="email" placeholder="E-Mail" class="form-control" type="text">
+                            <input name="email" placeholder="E-mail" class="form-control" type="text" required>
                         </div>
                     </div>
                 </div>
@@ -131,24 +148,10 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="form-group">
                     <label class="col-md-4 control-label"></label>
                     <div class="col-md-4">
-                        <button type="submit" class="btn btn-outline col-md-12">Gerar Certificado</button>
+                        <button type="submit" class="btn btn-success col-md-12">GERAR CERTIFICADO</button>
                     </div>
                 </div>
             </fieldset>
-        </form>
-    </div>
-
-    <div class="container">
-        <form class="form-horizontal" action="gerar_certificado/validate.php" method="get" id="validate_form">
-            <div class="col-md-4 inputGroupContainer">
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="fas fa-search text-white" aria-hidden="true"></i>
-                    </span>
-                    <input name="busca" class="form-control" type="text" placeholder="Insira o código impresso no certificado" aria-label="Search">
-                </div>
-            </div>
-            <button class="btn btn-outline-white" type="submit">Validar Certificado</button>
         </form>
     </div>
 
